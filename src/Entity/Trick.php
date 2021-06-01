@@ -56,7 +56,8 @@ class Trick
     private $images;
 
     /**
-     * @ORM\OneToOne(targetEntity=Image::class)
+     * @ORM\OneToOne(targetEntity=Image::class, orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $featuredImage;
 
@@ -64,6 +65,11 @@ class Trick
      * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
      */
     private $videos;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -204,6 +210,30 @@ class Trick
                 $video->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFeaturedImage(): ?Image
+    {
+        return $this->featuredImage;
+    }
+
+    public function setFeaturedImage(Image $featuredImage): self
+    {
+        $this->featuredImage = $featuredImage;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
