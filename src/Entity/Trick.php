@@ -56,8 +56,8 @@ class Trick
     private $images;
 
     /**
-     * @ORM\OneToOne(targetEntity=Image::class, orphanRemoval=true)
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToOne(targetEntity=Image::class, cascade={"remove"})
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $featuredImage;
 

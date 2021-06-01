@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un trick{% endblock %}
+
+{% block body %}
+    <div class="col-lg-7 col-md-10 mx-auto">
+        <h1>Créer un nouveau trick</h1>
+        {{ form_start(creationForm) }}
+            {{ form_row(creationForm.name) }}
+            {{ form_row(creationForm.description) }}
+            {{ form_row(creationForm.category) }}
+
+            <button type="submit" class="btn btn-primary btn-lg col-12">Créer</button>
+
+        {{ form_end(creationForm) }}
+    </div>
+
+{% endblock %}
