@@ -6,17 +6,18 @@ use App\Entity\User;
 use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use App\Form\TrickType;
+use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class TrickController extends AbstractController
 {
     #[Route('/trick/create', name: 'trick_create')]
-    public function create(Request $request): Response
+    public function create(Request $request, EntityManagerInterface $manager, FileUploader $uploader ): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -27,14 +28,31 @@ class TrickController extends AbstractController
             $trick->setCreatedAt(new \DateTime())
                 ->setUser($this->getUser())
                 ->setSlug($slugger->slug($form->get('name')->getData()));
+            
+            foreach($trick->getImages() as $image)
+            {
+                $image->setTrick($trick);
+                $imageFile = $form->get('file')->getData();
+                if ($imageFile) {
+                    $imageFileName = $uploader->upload($imageFile);
+                    $trick->setPath($imageFileName);
+                }
+                $manager->persist($image);
+            }
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trick);
-            $entityManager->flush();
+            foreach($trick->getVideos() as $video)
+            {
+                $video->setTrick($trick);
+                $manager->persist($video);
+            }
+            $manager->persist($trick);
+            $manager->flush();
+
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('trick/create.html.twig', [
-            'creationForm' => $form->createView()
+            'form' => $form->createView()
         ]);
     }
 
