@@ -15,8 +15,12 @@ class TrickManager
     private $uploader;
     private $slugger;
 
-    public function __construct(EntityManagerInterface $manager, Security $security, FileUploader $uploader, SluggerInterface $slugger)
-    {
+    public function __construct(
+        EntityManagerInterface $manager,
+        Security $security,
+        FileUploader $uploader,
+        SluggerInterface $slugger
+    ) {
         $this->manager = $manager;
         $this->security = $security;
         $this->uploader = $uploader;
@@ -26,20 +30,20 @@ class TrickManager
     public function persist(Trick $trick)
     {
         $trick->setCreatedAt(new \DateTime());
-        if(!$trick->getUser()) {
+        if (!$trick->getUser()) {
             $trick->setUser($this->security->getUser());
         }
         $trick->setSlug($this->slugger->slug($trick->getName()));
 
-        foreach($trick->getImages() as $image) {
+        foreach ($trick->getImages() as $image) {
             $image->setTrick($trick);
-            if($image->getFile()) {
+            if ($image->getFile()) {
                 $image->setPath($this->uploader->upload($image->getFile()));
             }
             $this->manager->persist($image);
         }
 
-        foreach($trick->getVideos() as $video) {
+        foreach ($trick->getVideos() as $video) {
             $video->setTrick($trick);
             $this->manager->persist($video);
         }
