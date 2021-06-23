@@ -1,0 +1,39 @@
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.featuredImage) }}
+    <fieldset class="form-group">
+        <label>Images</label>
+        <div
+            class="images"
+            data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}">
+            {% for image in form.images %}
+                <div class="item">{{ form_row(image) }}</div>
+            {% endfor %}
+        </div>
+        <button type="button"
+            class="btn btn-secondary add_item_link "
+            data-collection-holder-class="images">
+            Ajouter une image
+        </button>
+    </fieldset>
+    <fieldset class="form-group">
+        <label>Videos</label>
+        <div
+            class="videos"
+            data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+            {% for video in form.videos %}
+                <div class="item">{{ form_row(video) }}</div>
+            {% endfor %}
+        </div>
+        <button type="button"
+            class="btn btn-secondary add_item_link "
+            data-collection-holder-class="videos">
+            Ajouter une vidéo
+        </button>
+    </fieldset>
+    
+    <button type="submit" class="btn btn-primary btn-lg col-12">{{ submit|default('Valider') }}</button>
+
+{{ form_end(form) }}

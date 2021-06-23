@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ImageRepository::class)
@@ -18,7 +20,8 @@ class Image
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=150)
+     * @Assert\Length(max=150, maxMessage="Le nom ne doit pas dépasser 150 caractères")
      */
     private $name;
 
@@ -32,6 +35,16 @@ class Image
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
+
+    /**
+     * @Assert\Image(
+     *     maxSize = "1024k",
+     *     maxSizeMessage = "L'image fait plus de 1024ko",
+     *     mimeTypes= {"image/jpeg", "image/jpg", "image/png"},
+     *     mimeTypesMessage = "Sélectionner une image valide"
+     * )
+     */
+    private $file;
 
     public function getId(): ?int
     {
@@ -70,6 +83,18 @@ class Image
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
+
+    public function setFile(UploadedFile $file): self
+    {
+        $this->file = $file;
 
         return $this;
     }
