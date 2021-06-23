@@ -17,19 +17,7 @@ class ImageType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('file', FileType::class, [
-                'mapped' => false,
                 'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/jpg',
-                            'image/png',
-                        ],
-                        'mimeTypesMessage' => 'Veuillez envoyer une image valide ( jpeg, jpg ou png )',
-                    ])
-                ],
             ])
         ;
     }
