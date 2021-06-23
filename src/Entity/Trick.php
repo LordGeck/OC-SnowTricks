@@ -6,9 +6,16 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity(
+ *     fields={"name", "slug"},
+ *     errorPath="name",
+ *     message="Ce nom est déjà utilisé"
+ * )
  */
 class Trick
 {
@@ -20,12 +27,14 @@ class Trick
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string", length=150, unique=true)
+     * @Assert\Length(max=150, maxMessage="Le nom ne doit pas dépasser 150 caractères")
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min=15, minMessage="La description doit faire au moins 15 caractères")
      */
     private $description;
 
@@ -219,7 +228,7 @@ class Trick
         return $this->featuredImage;
     }
 
-    public function setFeaturedImage(Image $featuredImage): self
+    public function setFeaturedImage(?Image $featuredImage): self
     {
         $this->featuredImage = $featuredImage;
 
