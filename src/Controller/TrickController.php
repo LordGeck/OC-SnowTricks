@@ -24,7 +24,7 @@ class TrickController extends AbstractController
     public function create(Request $request): Response
     {
         $trick = new Trick();
-        $form = $this->createForm(TrickType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick, ['trick' => $trick]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
