@@ -1,6 +1,0 @@
-plugins: 
-  phpcodesniffer:
-    enabled: true
-    channel: beta
-    config:
-        standard: "PSR12"
