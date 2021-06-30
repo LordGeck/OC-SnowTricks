@@ -13,12 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
-    private $trickManager;
-
-    public function __construct(TrickManager $trickManager)
-    {
-        $this->trickManager = $trickManager;
-    }
+    public function __construct(private TrickManager $trickManager) {}
 
     #[Route('/trick/create', name: 'trick_create')]
     public function create(Request $request): Response
@@ -28,7 +23,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->trickManager->persist($trick);
+            $this->trickManager->persist($trick, $this->getUser());
 
             return $this->redirectToRoute('home');
         }
@@ -46,13 +41,23 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->trickManager->persist($trick);
+            $this->trickManager->persist($trick, $this->getUser());
 
             return $this->redirectToRoute('home');
         }
 
         return $this->render('trick/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'trick' => $trick
         ]);
+    }
+
+    #[Route('/trick/delete/{slug}', name: 'trick_delete')]
+    public function delete(string $slug, TrickRepository $repository): Response
+    {
+        $trick = $repository->findOneBySlug($slug);
+        $this->trickManager->delete($trick);
+
+        return $this->render('trick/home.html.twig');
     }
 }
