@@ -35,21 +35,21 @@
                                             <a href="{{ path('trick_edit', {slug: trick.slug}) }}">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                            <a data-bs-toggle="modal" data-bs-target="#deleteModal{{ loop.index }}">
                                                 <i class="bi bi-trash-fill text-danger"></i>
                                             </a>
                                         </div>
-                                        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Confirmer la supression</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Non</button>
-                                                    <a role="button" class="btn btn-danger" href="{{ path('trick_delete', {slug: trick.slug}) }}">Supprimer</a>
-                                                </div>
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Confirmer la supression</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <a role="button" class="btn btn-danger" href="{{ path('trick_delete', {slug: trick.slug}) }}">Supprimer</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
