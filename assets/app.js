@@ -23,3 +23,19 @@ require('bootstrap');
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
 });
+
+$(document).ready(function(){
+	$(window).scroll(function () {
+			if ($(this).scrollTop() > ($("main").offset().top)) {
+				$('#back-to-top').fadeIn();
+			} else {
+				$('#back-to-top').fadeOut();
+			}
+		});
+		$('#back-to-top').click(function () {
+			$('main,html').animate({
+				scrollTop: $("main").offset().top
+			}, "fast");
+			return false;
+		});
+});

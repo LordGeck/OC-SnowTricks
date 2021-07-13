@@ -1,1 +1,27 @@
 // src/Controller/custom.scss
+
+.masthead {
+    height: 100vh;
+    min-height: 500px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.card-img {
+    width: 100%;
+    object-fit: cover;
+}
+
+#back-to-top {
+    position: fixed;
+    bottom: 2vh;
+    right: 2vw;
+    display: none;
+}
+
+.trick-title {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+}

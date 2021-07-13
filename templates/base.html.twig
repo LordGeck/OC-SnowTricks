@@ -14,8 +14,9 @@
     </head>
     <body>
         {% include 'navbar.html.twig' %}
-        <div class="container p-5">
-            {% block body %}{% endblock %}
-        </div>
+        {% block body %}{% endblock %}
+        <button type="button" id="back-to-top" class="btn btn-dark float-end">
+            <i class="bi bi-caret-up-fill"></i>
+        </button>
     </body>
 </html>

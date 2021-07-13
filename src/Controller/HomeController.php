@@ -2,15 +2,30 @@
 
 namespace App\Controller;
 
+use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
     #[Route('/home', name: 'home')]
-    public function home(): Response
+    public function home(TrickRepository $repository): Response
     {
-        return $this->render('home.html.twig');
+        $tricks = $repository->findBy([], ['createdAt' => 'DESC'], 5, 0);
+
+        return $this->render('home.html.twig', ['tricks' => $tricks]);
+    }
+
+    #[Route('/home/moreTricks', name: 'load_more_tricks')]
+    public function loadMore(TrickRepository $repository, Request $request): Response
+    {
+        $tricks = $repository->findBy([], ['createdAt' => 'DESC'], 5, $request->query->get('itemToLoad'));
+
+        return new JsonResponse(
+            ['html' => $this->render('trick/_list.html.twig', ['tricks' => $tricks])->getContent()]
+        );
     }
 }

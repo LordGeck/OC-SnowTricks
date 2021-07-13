@@ -1,0 +1,67 @@
+{% for trick in tricks %}
+    <div class="col-lg-3 col-md-4 mb-5">
+        <div class="card">
+            <div class="card-top">
+                <a href="{{ path('trick_page', {slug: trick.slug}) }}">
+                    <img
+                        class="card-img"
+                        src="{{ trick.featuredImage.path|default(asset('images/1888567.jpg')) }}"
+                        alt="Image du trick">
+                </a>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title text-center">
+                    {{ trick.name }}
+                    {% if app.user %}
+                        <div class="float-end">
+                            <a href="{{ path('trick_edit', {slug: trick.slug}) }}">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a
+                                href="#"
+                                data-bs-toggle="modal" data-bs-target="#delete-{{ trick.slug }}">
+                                <i class="bi bi-trash-fill text-danger"></i>
+                            </a>
+                        </div>
+                        <div
+                            class="modal fade"
+                            id="delete-{{ trick.slug }}"
+                            tabindex="-1"
+                            aria-labelledby="delete-{{ trick.slug }}-Label"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">
+                                            Confirmer la supression
+                                        </h5>
+                                        <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                        </button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                            Annuler
+                                        </button>
+                                        <a
+                                            role="button"
+                                            class="btn btn-danger"
+                                            href="{{ path('trick_delete', {slug: trick.slug}) }}">
+                                            Supprimer
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </h5>
+            </div>
+        </div>
+    </div>
+{% endfor %}

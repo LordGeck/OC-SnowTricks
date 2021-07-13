@@ -3,7 +3,41 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <div class="col-lg-7 col-md-10 mx-auto">
-        <h1>Bienvenue</h1>
-    </div>
+    <header class="masthead" style="background-image: url('{{ asset('images/1888567.jpg') }}');">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12 text-center">
+                    <h1 class="font-weight-light text-light">
+                        Bienvenue sur Snow Tricks !
+                    </h1>
+                    <p class="lead">...</p>
+                    <a role="button" class="btn btn-light" href="#trick-list">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main id="trick-list" class="container p-5">
+        <div class="col-lg-10 col-md-10 mx-auto">
+            <div id="js-item-target" class="row">
+                {% include 'trick/_list.html.twig' %}
+            </div>
+            <div class="text-center">
+                <a
+                    role="button"
+                    id="js-load-more-item"
+                    class="btn btn-primary"
+                    data-item-to-load="5"
+                    href="{{ path('load_more_tricks') }}">
+                    Afficher plus
+                </a>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('load-more-item') }}
 {% endblock %}

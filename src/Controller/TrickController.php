@@ -58,6 +58,6 @@ class TrickController extends AbstractController
         $trick = $repository->findOneBySlug($slug);
         $this->trickManager->delete($trick);
 
-        return $this->render('trick/home.html.twig');
+        return $this->redirectToRoute('home');
     }
 }
