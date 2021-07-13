@@ -21,7 +21,7 @@ $(document).ready(function() {
         addFormDeleteLink($(this));
     });
 
-    $('body').on('click', '.add_item_link', function(e) {
+    $('body').on('click', '.js-add-item-link', function(e) {
         var $collectionHolderClass = $(e.currentTarget).data('collectionHolderClass');
         // add a new tag form (see next code block)
         addFormToCollection($collectionHolderClass);

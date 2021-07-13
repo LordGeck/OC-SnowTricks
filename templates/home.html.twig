@@ -7,7 +7,9 @@
         <div class="container h-100">
             <div class="row h-100 align-items-center">
                 <div class="col-12 text-center">
-                    <h1 class="font-weight-light text-light">Bienvenue sur Snow Tricks !</h1>
+                    <h1 class="font-weight-light text-light">
+                        Bienvenue sur Snow Tricks !
+                    </h1>
                     <p class="lead">...</p>
                     <a role="button" class="btn btn-light" href="#trick-list">
                         <i class="bi bi-caret-down-fill"></i>
@@ -18,48 +20,24 @@
     </header>
     <main id="trick-list" class="container p-5">
         <div class="col-lg-10 col-md-10 mx-auto">
-            <div class="row">
-                {% for trick in tricks %}
-                    <div class="col-lg-3 col-md-4 mb-5">
-                        <div class="card">
-                            <div class="card-top">
-                                <a href="{{ path('trick_page', {slug: trick.slug}) }}">
-                                    <img class="card-img" src="{{ trick.featuredImage.path|default(asset('images/1888567.jpg')) }}" alt="Image du trick">
-                                </a>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title text-center">
-                                    {{ trick.name }}
-                                    {% if app.user %}
-                                        <div class="float-end">
-                                            <a href="{{ path('trick_edit', {slug: trick.slug}) }}">
-                                                <i class="bi bi-pencil-fill"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#deleteModal{{ loop.index }}">
-                                                <i class="bi bi-trash-fill text-danger"></i>
-                                            </a>
-                                        </div>
-                                        <div class="modal fade" id="deleteModal{{ loop.index }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Confirmer la supression</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                                        <a role="button" class="btn btn-danger" href="{{ path('trick_delete', {slug: trick.slug}) }}">Supprimer</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+            <div id="js-item-target" class="row">
+                {% include 'trick/_list.html.twig' %}
+            </div>
+            <div class="text-center">
+                <a
+                    role="button"
+                    id="js-load-more-item"
+                    class="btn btn-primary"
+                    data-item-to-load="5"
+                    href="{{ path('load_more_tricks') }}">
+                    Afficher plus
+                </a>
             </div>
         </div>
     </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('load-more-item') }}
 {% endblock %}
