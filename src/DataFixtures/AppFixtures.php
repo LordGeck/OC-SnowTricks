@@ -53,8 +53,7 @@ class AppFixtures extends Fixture
                 ->setUser($user)
                 ->setCategory($category);
             // add demo images
-            foreach ($testImages as $images)
-            {
+            foreach ($testImages as $images) {
                 $image = new Image();
                 $image->setName($images)
                     ->setPath('https://via.placeholder.com/600x300')
@@ -62,8 +61,7 @@ class AppFixtures extends Fixture
                 $manager->persist($image);
             }
             // add demo video
-            foreach ($testVideos as $videos)
-            {
+            foreach ($testVideos as $videos) {
                 $video = new Video();
                 $video->setUrl($videos . '.com')
                     ->setTrick($trick);

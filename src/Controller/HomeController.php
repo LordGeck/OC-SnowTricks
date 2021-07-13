@@ -24,6 +24,9 @@ class HomeController extends AbstractController
     {
         $tricks = $repository->findBy([], ['createdAt' => 'DESC'], 5, $request->query->get('itemToLoad'));
 
-        return new JsonResponse(['html' => $this->render('trick/_list.html.twig', ['tricks' => $tricks])->getContent()]);
+        return new JsonResponse([
+            'html' => $this->render('trick/_list.html.twig',
+            ['tricks' => $tricks])->getContent()]
+        );
     }
 }
