@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'home')]
     public function home(TrickRepository $repository): Response
     {
-        $tricks = $repository->findBy([], ['createdAt' => 'DESC'], 5, 0);
+        $tricks = $repository->findBy([], ['createdAt' => 'ASC'], 8, 0);
 
         return $this->render('home.html.twig', ['tricks' => $tricks]);
     }
@@ -22,7 +22,7 @@ class HomeController extends AbstractController
     #[Route('/home/moreTricks', name: 'load_more_tricks')]
     public function loadMore(TrickRepository $repository, Request $request): Response
     {
-        $tricks = $repository->findBy([], ['createdAt' => 'DESC'], 5, $request->query->get('itemToLoad'));
+        $tricks = $repository->findBy([], ['createdAt' => 'ASC'], $request->query->get('itemLimit'), $request->query->get('itemOffset'));
 
         return new JsonResponse(
             ['html' => $this->render('trick/_list.html.twig', ['tricks' => $tricks])->getContent()]
