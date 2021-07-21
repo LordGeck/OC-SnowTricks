@@ -5,14 +5,14 @@
                 <a href="{{ path('trick_page', {slug: trick.slug}) }}">
                     <img
                         class="card-img"
-                        src="{{ trick.featuredImage.path|default(asset('images/1888567.jpg')) }}"
+                        src="{{ asset('images/' ~ trick.featuredImage.path)|default(asset('images/default.jpg')) }}"
                         alt="Image du trick">
                 </a>
             </div>
             <div class="card-body">
                 <h5 class="card-title text-center">
                     {{ trick.name }}
-                    {% if app.user %}
+                    {% if app.user and (app.user == trick.user) %}
                         <div class="float-end">
                             <a href="{{ path('trick_edit', {slug: trick.slug}) }}">
                                 <i class="bi bi-pencil-fill"></i>
