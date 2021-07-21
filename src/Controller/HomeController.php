@@ -22,7 +22,12 @@ class HomeController extends AbstractController
     #[Route('/home/moreTricks', name: 'load_more_tricks')]
     public function loadMore(TrickRepository $repository, Request $request): Response
     {
-        $tricks = $repository->findBy([], ['createdAt' => 'ASC'], $request->query->get('itemLimit'), $request->query->get('itemOffset'));
+        $tricks = $repository->findBy(
+            [],
+            ['createdAt' => 'ASC'],
+            $request->query->get('itemLimit'),
+            $request->query->get('itemOffset'),
+        );
 
         return new JsonResponse(
             ['html' => $this->render('trick/_list.html.twig', ['tricks' => $tricks])->getContent()]
