@@ -3,11 +3,18 @@
 {% block title %}Editer un trick{% endblock %}
 
 {% block body %}
-    <div class="col-lg-7 col-md-10 mx-auto">
-        <h1>Editer le trick</h1>
-        {% include 'trick/_form.html.twig' with {'submit': 'Editer'} %}
-    </div>
-    <a href="{{ path('trick_delete', {'slug': trick.slug}) }}" class="btn btn-danger" role="button">Supprimer</a>
+    <main class="container p-5">
+        <div class="col-lg-7 col-md-10 mx-auto">
+            <h1>Editer le trick</h1>
+            {% include 'trick/_form.html.twig' with {'submit': 'Editer'} %}
+            <a
+                href="{{ path('trick_delete', {'slug': trick.slug}) }}"
+                class="btn btn-danger"
+                role="button">
+                Supprimer
+            </a>
+        </div>
+    </main>
 {% endblock %}
 
 {% block javascripts %}
