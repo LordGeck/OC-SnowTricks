@@ -43,21 +43,36 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->trickManager->persist($trick, $this->getUser());
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
         }
 
-        return $this->render('trick/edit.html.twig', [
-            'form' => $form->createView(),
-            'trick' => $trick
-        ]);
+        if (!$trick->getUser() === $this->getUser()) {
+            return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
+        } else {
+            return $this->render('trick/edit.html.twig', [
+                'form' => $form->createView(),
+                'trick' => $trick
+            ]);
+        }
     }
 
     #[Route('/trick/delete/{slug}', name: 'trick_delete')]
     public function delete(string $slug, TrickRepository $repository): Response
     {
         $trick = $repository->findOneBySlug($slug);
-        $this->trickManager->delete($trick);
 
-        return $this->redirectToRoute('home');
+        if ($trick->getUser() === $this->getUser()) {
+            $this->trickManager->delete($trick);
+        }
+
+        return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
+    }
+
+    #[Route('/trick/page/{slug}', name: 'trick_page')]
+    public function show(string $slug, TrickRepository $repository): Response
+    {
+        $trick = $repository->findOneBySlug($slug);
+
+        return $this->render('trick/page.html.twig', ['trick' => $trick]);
     }
 }
