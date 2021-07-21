@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ trick.name }}{% endblock %}
+
+{% block body %}
+    <main class="container col-lg-7 col-md-8 bg-light">
+        <div class="row">
+            <div class="card bg-light border-0 p-1">
+                <img class="card-img" src="{{ asset('images/' ~ trick.featuredImage.path)|default(asset('images/default.jpg')) }}" alt="{{ trick.featuredImage.name }}">
+                <div class="card-img-overlay">
+                    <h1 class="card-title text-white text-center mx-auto">{{ trick.name }}</h1>
+                    {% if app.user and (app.user == trick.user) %}
+                        <div class="edit-button bg-dark p-1">
+                            <a href="{{ path('trick_edit', {slug: trick.slug}) }}">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            <a
+                                href="#"
+                                data-bs-toggle="modal" data-bs-target="#delete-trick">
+                                <i class="bi bi-trash-fill text-danger"></i>
+                            </a>
+                        </div>
+                        <div
+                            class="modal fade"
+                            id="delete-trick"
+                            tabindex="-1"
+                            aria-labelledby="delete-trick-label"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">
+                                            Confirmer la supression
+                                        </h5>
+                                        <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                        </button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                            Annuler
+                                        </button>
+                                        <a
+                                            role="button"
+                                            class="btn btn-danger"
+                                            href="{{ path('trick_delete', {slug: trick.slug}) }}">
+                                            Supprimer
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            {% for image in trick.images %}
+                <div class="col-lg-3 col-md-4 p-1 mx-auto">
+                    <img class="img-thumbnail" src="{{ asset('images/' ~ image.path) }}" alt="{{ image.name }}">
+                </div>
+            {% endfor %}
+            {% for video in trick.videos %}
+                <div class="col-lg-3 col-md-4 p-1 mx-auto">
+                    <iframe class="img-thumbnail" src="{{ video.url }}" allowfullscreen></iframe>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <p>{{ trick.description }}</p>
+        </div>
+        <div class="row">
+            <div class="row text-center text-white mx-auto bg-dark">
+                <p class="col">Publié le {{ trick.createdAt | date('d/m/Y') }} à {{ trick.createdAt | date('H:i') }} par {{ trick.user.username }}</p>
+                <p class="col">Mis à jour le {{ trick.updatedAt | date('d/m/Y') }} à {{ trick.updatedAt | date('H:i') }}</p>
+                {% if trick.category %}
+                    <p class="col"> Groupe : {{ trick.category.name }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
