@@ -48,8 +48,7 @@ class TrickController extends AbstractController
 
         if (!$trick->getUser() === $this->getUser()) {
             return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
-        }
-        else {
+        } else {
             return $this->render('trick/edit.html.twig', [
                 'form' => $form->createView(),
                 'trick' => $trick
