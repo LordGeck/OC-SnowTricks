@@ -43,8 +43,8 @@ class TrickController extends AbstractController
         $trick = $repository->findOneBySlug($slug);
         $form = $this->createForm(TrickType::class, $trick, ['trick' => $trick]);
         $form->handleRequest($request);
-        if (!$trick->getUser() === $this->getUser()) {
 
+        if (!$trick->getUser() === $this->getUser()) {
             return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
         } if ($form->isSubmitted() && $form->isValid()) {
             $this->trickManager->persist($trick, $this->getUser());
@@ -76,8 +76,7 @@ class TrickController extends AbstractController
         Request $request,
         CommentManager $commentManager,
         TrickRepository $repository,
-    ): Response
-    {
+    ): Response {
         $trick = $repository->findOneBySlug($slug);
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
