@@ -16,14 +16,8 @@ class TrickManager
         private SluggerInterface $slugger,
     ) {}
 
-    public function persist(Trick $trick, User $user): void
+    private function persistMedias(Trick $trick): void
     {
-        $trick->setCreatedAt(new \DateTime());
-        if (!$trick->getUser()) {
-            $trick->setUser($user);
-        }
-        $trick->setSlug($this->slugger->slug($trick->getName()));
-
         foreach ($trick->getImages() as $image) {
             $image->setTrick($trick);
             if ($image->getFile()) {
@@ -31,15 +25,35 @@ class TrickManager
             }
             $this->entityManager->persist($image);
         }
-
         foreach ($trick->getVideos() as $video) {
             $video->setTrick($trick);
             $this->entityManager->persist($video);
         }
+    }
+
+    public function create(Trick $trick, User $user): void
+    {
+        $trick->setCreatedAt(new \DateTime());
+        $trick->setUser($user);
+        $trick->setSlug($this->slugger->slug($trick->getName()));
+
+        $this->persistMedias($trick);
 
         $this->entityManager->persist($trick);
         $this->entityManager->flush();
     }
+
+    public function edit(Trick $trick): void
+    {
+        $trick->setUpdatedAt(new \DateTime());
+        $trick->setSlug($this->slugger->slug($trick->getName()));
+
+        $this->persistMedias($trick);
+
+        $this->entityManager->persist($trick);
+        $this->entityManager->flush();
+    }
+
 
     public function delete(Trick $trick): void
     {

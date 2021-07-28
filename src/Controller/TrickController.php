@@ -27,7 +27,7 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->trickManager->persist($trick, $this->getUser());
+            $this->trickManager->create($trick, $this->getUser());
 
             return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
         }
@@ -47,8 +47,8 @@ class TrickController extends AbstractController
         if (!$trick->getUser() === $this->getUser()) {
             return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
         } if ($form->isSubmitted() && $form->isValid()) {
-            $this->trickManager->persist($trick, $this->getUser());
-            //change redirection to the trick page
+            $this->trickManager->edit($trick);
+            $slug = $trick->getSlug();
             return $this->redirectToRoute('trick_page', ['slug' => $slug]);
         }
 
