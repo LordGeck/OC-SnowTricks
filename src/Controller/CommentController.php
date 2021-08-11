@@ -17,11 +17,11 @@ class CommentController extends AbstractController
     public function delete(string $id, CommentRepository $repository): Response
     {
         $comment = $repository->findOneById($id);
-
         if ($comment->getUser() === $this->getUser()) {
             $this->commentManager->delete($comment);
         }
-        //not the right route, need to go back to the trick page
-        return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
+        return $this->redirectToRoute('trick_page', ['slug' => $comment->getTrick()->getSlug(),
+        '_fragment' => 'comments'
+    ]);
     }
 }
