@@ -6,7 +6,13 @@
     <main class="container col-lg-7 col-md-8 bg-light">
         <div class="row">
             <div class="card bg-light border-0 p-1">
-                <img class="card-img" src="{{ asset('images/' ~ trick.featuredImage.path)|default(asset('images/default.jpg')) }}" alt="{{ trick.featuredImage.name }}">
+                {% if trick.featuredImage %}
+                    <img class="card-img" src="{{ asset('images/' ~ trick.featuredImage.path) }}" alt="{{ trick.featuredImage.name }}">
+                {% elseif trick.images[0] is defined %}
+                    <img class="card-img" src="{{ asset('images/' ~ trick.images[0].path) }}" alt="{{ trick.images[0].name }}">
+                {% else %}
+                    <img class="card-img" src="{{ asset('images/default.jpg') }}" alt="Image par défaut">
+                {% endif %}
                 <div class="card-img-overlay">
                     <h1 class="card-title text-white text-center mx-auto">{{ trick.name }}</h1>
                     {% if app.user and (app.user == trick.user) %}
@@ -78,12 +84,49 @@
         <div class="row">
             <div class="row text-center text-white mx-auto bg-dark">
                 <p class="col">Publié le {{ trick.createdAt | date('d/m/Y') }} à {{ trick.createdAt | date('H:i') }} par {{ trick.user.username }}</p>
-                <p class="col">Mis à jour le {{ trick.updatedAt | date('d/m/Y') }} à {{ trick.updatedAt | date('H:i') }}</p>
+                {% if trick.updatedAt %}
+                    <p class="col">Mis à jour le {{ trick.updatedAt | date('d/m/Y') }} à {{ trick.updatedAt | date('H:i') }}</p>
+                {% endif %}
                 {% if trick.category %}
-                    <p class="col"> Groupe : {{ trick.category.name }}</p>
+                    <p class="col">Groupe : {{ trick.category.name }}</p>
                 {% endif %}
             </div>
         </div>
-        {% include 'trick/_comment.html.twig' %}
+        <div id="comments" class="row text-center p-3">
+            {% if app.user %}
+                <div class="col-lg-8 mx-auto">
+                    {{ form_start(form) }}
+                    {{ form_row(form.content, {label: false}) }}
+                    <button type="submit" class="btn btn-primary mx-auto">Commenter</button>
+                    {{ form_end(form) }}
+                </div>
+            {% else %}
+                <div class="text-center">
+                    <p class="text-center text-muted">Veuillez vous connecter pour laisser un commentaire</p>
+                </div>
+            {% endif %}
+        </div>
+        {% if trick.comments is empty %}
+            <p class="text-center text-muted">Aucun commentaire</p>
+        {% else %}
+            <div id="js-item-target" class="row">
+                {% include 'trick/_comments.html.twig' %}
+            </div>
+            <div class="text-center p-3">
+                <a
+                    role="button"
+                    id="js-load-more-item"
+                    class="btn btn-primary"
+                    data-item-to-load="5"
+                    href="{{ path('load_more_comments', {slug: trick.slug}) }}">
+                    Afficher plus
+                </a>
+            </div>
+        {% endif %}
     </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('load-more-item') }}
 {% endblock %}

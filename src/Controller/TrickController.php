@@ -13,6 +13,7 @@ use App\Service\CommentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
@@ -75,21 +76,43 @@ class TrickController extends AbstractController
         string $slug,
         Request $request,
         CommentManager $commentManager,
-        TrickRepository $repository,
+        TrickRepository $trickRepository,
+        CommentRepository $commentRepository,
     ): Response {
-        $trick = $repository->findOneBySlug($slug);
-        $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
+        $trick = $trickRepository->findOneBySlug($slug);
+        $comments = $commentRepository->findBy(['trick' => $trick], ['createdAt' => 'DESC'], 5, 0);
+        $newComment = new Comment();
+        $form = $this->createForm(CommentType::class, $newComment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $commentManager->persist($comment, $trick, $this->getUser());
+            $commentManager->persist($newComment, $trick, $this->getUser());
             
             return $this->redirectToRoute('trick_page', ['slug' => $slug, '_fragment' => 'comments']);
         }
 
-        return $this->render('trick/page.html.twig', ['trick' => $trick,
+        return $this->render('trick/page.html.twig', ['trick' => $trick, 'comments' => $comments,
             'form' => $form->createView()
         ]);
+    }
+
+    #[Route('/trick/page/{slug}/moreComments', name: 'load_more_comments')]
+    public function loadMore(
+        string $slug,
+        Request $request,
+        TrickRepository $trickRepository,
+        CommentRepository $commentRepository,
+    ): Response {
+        $trick = $trickRepository->findOneBySlug($slug);
+        $comments = $commentRepository->findBy(
+            ['trick' => $trick],
+            ['createdAt' => 'DESC'],
+            $request->query->get('itemLimit'),
+            $request->query->get('itemOffset'),
+        );
+
+        return new JsonResponse(
+            ['html' => $this->render('trick/_comments.html.twig', ['comments' => $comments])->getContent()]
+        );
     }
 }
