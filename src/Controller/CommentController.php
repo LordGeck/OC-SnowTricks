@@ -22,6 +22,6 @@ class CommentController extends AbstractController
         }
         return $this->redirectToRoute('trick_page', ['slug' => $comment->getTrick()->getSlug(),
         '_fragment' => 'comments'
-    ]);
+        ]);
     }
 }
