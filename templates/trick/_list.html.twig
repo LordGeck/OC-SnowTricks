@@ -3,10 +3,13 @@
         <div class="card">
             <div class="card-top">
                 <a href="{{ path('trick_page', {slug: trick.slug}) }}">
-                    <img
-                        class="card-img"
-                        src="{{ asset('images/' ~ trick.featuredImage.path)|default(asset('images/default.jpg')) }}"
-                        alt="Image du trick">
+                    {% if trick.featuredImage %}
+                        <img class="card-img" src="{{ asset('images/' ~ trick.featuredImage.path) }}" alt="{{ trick.featuredImage.name }}">
+                    {% elseif trick.images[0] is defined %}
+                        <img class="card-img" src="{{ asset('images/' ~ trick.images[0].path) }}" alt="{{ trick.images[0].name }}">
+                    {% else %}
+                        <img class="card-img" src="{{ asset('images/default.jpg') }}" alt="Image par défaut">
+                    {% endif %}
                 </a>
             </div>
             <div class="card-body">
