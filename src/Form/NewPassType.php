@@ -18,8 +18,6 @@ class NewPassType extends AbstractType
     {
         $builder
             ->add('plainPassword', RepeatedType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne correspondent pas',
                 'mapped' => false,
@@ -30,7 +28,6 @@ class NewPassType extends AbstractType
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
-                        // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                 ],
@@ -41,7 +38,7 @@ class NewPassType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            // Configure your form options here
         ]);
     }
 }
