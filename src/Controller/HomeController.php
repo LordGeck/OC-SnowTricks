@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'home')]
     public function home(TrickRepository $repository): Response
     {
-        $tricks = $repository->findBy([], ['createdAt' => 'ASC'], 8, 0);
+        $tricks = $repository->findBy([], ['createdAt' => 'DESC'], 8, 0);
 
         return $this->render('home.html.twig', ['tricks' => $tricks]);
     }
@@ -24,7 +24,7 @@ class HomeController extends AbstractController
     {
         $tricks = $repository->findBy(
             [],
-            ['createdAt' => 'ASC'],
+            ['createdAt' => 'DESC'],
             $request->query->get('itemLimit'),
             $request->query->get('itemOffset'),
         );
