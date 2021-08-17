@@ -24,53 +24,131 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $slugger = new AsciiSlugger();
-        $testImages = ['img1','img2','img3'];
-        $testVideos = ['video1','video2','video3'];
-        //test user
+
+        // demo user
         $user = new User();
-        $user->setUsername('Test')
+        $user->setUsername('DemoUser')
             ->setPassword($this->encoder->encodePassword($user, 'password'))
-            ->setEmail('test@test.com');
+            ->setEmail('user@demo.com');
         $manager->persist($user);
 
-        // generate 3 category
-        for ($i = 0; $i < 3; $i++) {
-            $category = new Category();
-            $name = 'Catégorie ' . $i;
-            $category->setName($name);
-            $manager->persist($category);
-        }
+        // 2 demo category
+        $grab = new Category();
+        $grab->setName('Grab');
+        $rotation = new Category();
+        $rotation->setName('Rotation');
+        $manager->persist($grab);
+        $manager->persist($rotation);
         
-        // generate 25 tricks
-        for ($i = 0; $i < 25; $i++) {
+        // tricks
+        $demoTricks = [
+            [
+                'Mute',
+                'Saisie de la carre frontside de la planche entre les deux pieds avec la main avant.',
+                $grab,
+            ],
+            [
+                'Melancholie',
+                'Saisie de la carre backside de la planche, entre les deux pieds, avec la main avant.',
+                $grab,
+            ],
+            [
+                'Indy',
+                'Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière.',
+                $grab,
+            ],
+            [
+                'Stalefish',
+                'Saisie de la carre backside de la planche entre les deux pieds avec la main arrière.',
+                $grab,
+            ],
+            [
+                'Tail grab',
+                'Saisie de la partie arrière de la planche, avec la main arrière.',
+                $grab,
+            ],
+            [
+                'Nose grab',
+                'Saisie de la partie avant de la planche, avec la main avant.',
+                $grab,
+            ],
+            [
+                'Japan',
+                'Saisie de l\'avant de la planche, avec la main avant, du côté de la carre frontside.',
+                $grab,
+            ],
+            [
+                'Seat belt',
+                'Saisie du carre frontside à l\'arrière avec la main avant.',
+                $grab,
+            ],
+            [
+                'Truck driver',
+                'Saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture).',
+                $grab,
+            ],
+            [
+                'Trois six',
+                '360, trois six pour un tour complet.',
+                $rotation,
+            ],
+            [
+                'Cinq quatre',
+                '540, cinq quatre pour un tour et demi.',
+                $rotation,
+            ],
+            [
+                'Sept deux',
+                '720, sept deux pour deux tours complets.',
+                $rotation,
+            ],
+            [
+                'Big foot',
+                '1080 ou big foot pour trois tours.',
+                $rotation,
+            ],
+        ];
+
+        // demo images
+        $demoImages = [
+            'demo1.jpg',
+            'demo2.jpg',
+            'demo3.jpg',
+            'demo4.jpg',
+            'demo5.jpg',
+            'demo6.jpg',
+            'demo7.jpg',
+        ];
+
+        // generate tricks
+        foreach ($demoTricks as $demoTrick) {
             $trick = new Trick();
-            $name = 'Trick ' . $i;
-            $slug = $slugger->slug($name);
-            $trick->setName($name)
-                ->setSlug($slug)
-                ->setDescription('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam at varius massa.')
+            $trick->setName($demoTrick[0])
+                ->setSlug($slugger->slug($demoTrick[0]))
+                ->setDescription($demoTrick[1])
                 ->setCreatedAt(new \DateTime)
                 ->setUser($user)
-                ->setCategory($category);
-            // add demo images
-            foreach ($testImages as $images) {
+                ->setCategory($demoTrick[2]);
+            
+            // generate featured image
+            $featuredImage = new Image();
+            $featuredImage->setName($demoTrick[0] . ' image')
+                ->setPath($demoImages[array_rand($demoImages)])
+                ->setTrick($trick);
+            $trick->setFeaturedImage($featuredImage);
+            $manager->persist($featuredImage);
+
+            // generate 3 more images
+            for ($i = 0; $i < 3; $i++) {
                 $image = new Image();
-                $image->setName($images)
-                    ->setPath('https://via.placeholder.com/600x300')
+                $image->setName($demoTrick[0] . ' image')
+                    ->setPath($demoImages[array_rand($demoImages)])
                     ->setTrick($trick);
                 $manager->persist($image);
             }
-            // add demo video
-            foreach ($testVideos as $videos) {
-                $video = new Video();
-                $video->setUrl($videos . '.com')
-                    ->setTrick($trick);
-                $manager->persist($video);
-            }
-            $trick->setFeaturedImage($image);
+
             $manager->persist($trick);
         }
-
         $manager->flush();
     }
 }
