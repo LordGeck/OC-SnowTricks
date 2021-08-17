@@ -29,6 +29,7 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->trickManager->create($trick, $this->getUser());
+            $this->addFlash('success', 'Le trick a été créé avec succès');
 
             return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);
         }
@@ -50,6 +51,8 @@ class TrickController extends AbstractController
         } if ($form->isSubmitted() && $form->isValid()) {
             $this->trickManager->edit($trick);
             $slug = $trick->getSlug();
+            $this->addFlash('success', 'Le trick a été édité avec succès');
+
             return $this->redirectToRoute('trick_page', ['slug' => $slug]);
         }
 
@@ -66,6 +69,7 @@ class TrickController extends AbstractController
 
         if ($trick->getUser() === $this->getUser()) {
             $this->trickManager->delete($trick);
+            $this->addFlash('success', 'Le trick a été supprimé avec succès');
         }
 
         return $this->redirectToRoute('home', ['_fragment' => 'trick-list']);

@@ -3,6 +3,7 @@
 {% block title %}{{ trick.name }}{% endblock %}
 
 {% block body %}
+    {% include '_flashes.html.twig' %}
     <main class="container col-lg-7 col-md-8 bg-light">
         <div class="row">
             <div class="card bg-light border-0 p-1">
@@ -84,7 +85,7 @@
             </button>
         </div>
         <div class="row">
-            <p>{{ trick.description }}</p>
+            <p class="lead">{{ trick.description }}</p>
         </div>
         <div class="row">
             <div class="row text-center text-white mx-auto bg-dark">
