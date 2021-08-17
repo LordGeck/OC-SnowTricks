@@ -66,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <div class="row p-2">
+        <div id="media" class="row p-2 d-none d-lg-flex">
             {% for image in trick.images %}
                 <div class="col-lg-3 col-md-4 p-1 mx-auto">
                     <img class="img-thumbnail" src="{{ asset('images/' ~ image.path) }}" alt="{{ image.name }}">
@@ -77,6 +77,11 @@
                     <iframe class="img-thumbnail" src="{{ video.url }}" allowfullscreen></iframe>
                 </div>
             {% endfor %}
+        </div>
+        <div class="d-lg-none text-center m-1">
+            <button id="js-media" class="btn btn-secondary mx-auto d-lg-none text-center">
+                Galerie
+            </button>
         </div>
         <div class="row">
             <p>{{ trick.description }}</p>
@@ -129,4 +134,5 @@
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('load-more-item') }}
+    {{ encore_entry_script_tags('hide-media') }}
 {% endblock %}
